@@ -1,10 +1,9 @@
-
-from http import server
-import socket    
-
-if __name__ == "__main__":
-    ip = "127.0.0.1"
-    port= 1234
-
-    client  = socket.socket(socket.AF_INET , socket.SOCK_STREAM)
-    client.connect((ip,port))
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   client.py
+#	modified:   server.py
+#
