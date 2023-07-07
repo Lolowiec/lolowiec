@@ -9,6 +9,6 @@ if __name__ == "__main__":
     client  = socket.socket(socket.AF_INET , socket.SOCK_STREAM)
     client.connect((ip,port))
 
-    string = "Helo: "
+    string = "GET / HTTP/1.1\nHost: localhost\n"
     client.send(bytes(string, "utf-8"))
- 
+
