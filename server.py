@@ -2,7 +2,14 @@ import socket
 
 
 def parse_HTTP(req):
-    return "GET"
+    if "GET" in req:
+        return "GET"
+    if "POST" in req:
+        return "POST"
+    if "PUT" in req:
+        return "PUT"
+    if "DELETE" in req:
+        return "DELETE"
 
 
 assert parse_HTTP("GET") == "GET"
