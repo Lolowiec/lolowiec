@@ -5,11 +5,14 @@ def parse_HTTP(req):
     return "GET"
 
 
-parse_HTTP("GET")
+assert parse_HTTP("GET") == "GET"
+assert parse_HTTP("POST") == "POST"
+assert parse_HTTP("PUT") == "PUT"
+assert parse_HTTP("DELETE") == "DELETE"
 
 
-# if __name__ == "__main__":
-#     ip = "127.0.0.1"
+# if __name__ == '__main__':
+#     ip = '127.0.0.1'
 #     port= 1235
 
 #     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -19,10 +22,10 @@ parse_HTTP("GET")
 
 #     while True:
 #         client, address = server.accept()
-#         print(f"Connection - {address[0]} : {address[1]} ")
+#         print(f'Connection - {address[0]} : {address[1]} ')
 
 #         request = client.recv(1024)
-#         request = request.decode("utf-8")
+#         request = request.decode('utf-8')
 #         if 'GET' in request :
 #             print('Its GET')
 #         if 'POST' in request :
