@@ -1,21 +1,30 @@
-import socket
+import unittest
 
 
 def parse_HTTP(req):
-    if "GET" in req:
-        return "GET"
-    if "POST" in req:
-        return "POST"
-    if "PUT" in req:
-        return "PUT"
-    if "DELETE" in req:
-        return "DELETE"
+    res = []
+    temp = ""
+    for x in req:
+        print(x)
+        if " " in x:
+            res.append(temp)
+            temp = ""
+        else:
+            temp += x
+    res.append(temp)
+    return tuple(res)
 
 
-assert parse_HTTP("GET") == "GET"
-assert parse_HTTP("POST") == "POST"
-assert parse_HTTP("PUT") == "PUT"
-assert parse_HTTP("DELETE") == "DELETE"
+class TestStringMethods(unittest.TestCase):
+    def test_upper(self):
+        self.assertEqual(parse_HTTP("GET /index.html"), ("GET", "/index.html"))
+        self.assertEqual(parse_HTTP("POST /index.html"), ("POST", "/index.html"))
+        self.assertEqual(parse_HTTP("PUT /index.html"), ("PUT", "/index.html"))
+        self.assertEqual(parse_HTTP("DELETE /index.html"), ("DELETE", "/index.html"))
+
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 # if __name__ == '__main__':
