@@ -16,11 +16,20 @@ def parse_HTTP(req):
 
 
 class TestStringMethods(unittest.TestCase):
-    def test_upper(self):
-        self.assertEqual(parse_HTTP("GET /index.html"), ("GET", "/index.html"))
-        self.assertEqual(parse_HTTP("POST /index.html"), ("POST", "/index.html"))
-        self.assertEqual(parse_HTTP("PUT /index.html"), ("PUT", "/index.html"))
-        self.assertEqual(parse_HTTP("DELETE /index.html"), ("DELETE", "/index.html"))
+    def test_upper(self):  # metod       reqest
+        self.assertEqual(
+            parse_HTTP("GET /index.html HTTP/1.0"), ("GET", "/index.html", "HTTP/1.0")
+        )
+        self.assertEqual(
+            parse_HTTP("POST /index.html HTTP/1.0"), ("POST", "/index.html", "HTTP/1.0")
+        )
+        self.assertEqual(
+            parse_HTTP("PUT /index.html HTTP/1.0"), ("PUT", "/index.html", "HTTP/1.0")
+        )
+        self.assertEqual(
+            parse_HTTP("DELETE /index.html HTTP/1.0"),
+            ("DELETE", "/index.html", "HTTP/1.0"),
+        )
 
 
 if __name__ == "__main__":
