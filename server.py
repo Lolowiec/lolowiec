@@ -18,33 +18,37 @@ def parse_HTTP(req: str) -> tuple:
 class HTTPreq:
     def __init__(self, req: str):
         pol = parse_HTTP(req)
-        if len(pol) != 3:
-            raise ValueError("inwalid HTTP req size")
-
+        dic = {}
         self.req = req
+        self.dic = dic
         self.method = pol[0]
-        self.verson = pol[2]
         self.path = pol[1]
-
-
-p1 = HTTPreq("GET /index.html HTTP/1.0")
+        self.verson = pol[2]
+        self.headers = {}
+        self.headers[""] = 123
 
 
 class TestStringMethods(unittest.TestCase):
     def test_minimalHTTPreq(self):  # metod       ścieszka   wersja
-        self.assertEqual(
-            parse_HTTP("GET /index.html HTTP/1.0"), ("GET", "/index.html", "HTTP/1.0")
-        )
-        self.assertEqual(
-            parse_HTTP("POST /index.html HTTP/1.0"), ("POST", "/index.html", "HTTP/1.0")
-        )
-        self.assertEqual(
-            parse_HTTP("PUT /index.html HTTP/1.0"), ("PUT", "/index.html", "HTTP/1.0")
-        )
-        self.assertEqual(
-            parse_HTTP("DELETE /index.html HTTP/1.0"),
-            ("DELETE", "/index.html", "HTTP/1.0"),
-        )
+        reqGET = HTTPreq("GET /index.html HTTP/1.0")
+        self.assertEqual(reqGET.method, "GET")
+        self.assertEqual(reqGET.path, "/index.html")
+        self.assertEqual(reqGET.verson, "HTTP/1.0")
+
+        reqPOST = HTTPreq("POST /index.html HTTP/1.0")
+        self.assertEqual(reqPOST.method, "POST")
+        self.assertEqual(reqPOST.path, "/index.html")
+        self.assertEqual(reqPOST.verson, "HTTP/1.0")
+
+        reqPUT = HTTPreq("PUT /index.html HTTP/1.0")
+        self.assertEqual(reqPUT.method, "PUT")
+        self.assertEqual(reqPUT.path, "/index.html")
+        self.assertEqual(reqPUT.verson, "HTTP/1.0")
+
+        reqDELETE = HTTPreq("DELETE /index.html HTTP/1.0")
+        self.assertEqual(reqDELETE.method, "DELETE")
+        self.assertEqual(reqDELETE.path, "/index.html")
+        self.assertEqual(reqDELETE.verson, "HTTP/1.0")
 
     def test_HTTPHeders(self):
         req = HTTPreq(
@@ -53,6 +57,8 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(req.method, "GET")
         self.assertEqual(req.path, "/index.html")
         self.assertEqual(req.verson, "HTTP/1.0")
+        self.assertEqual(req.headers["Host"], "localhost:8000")
+        self.assertEqual(req.headers["User-Agent"], "Mozilla/5.0")
 
 
 if __name__ == "__main__":
