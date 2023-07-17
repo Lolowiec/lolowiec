@@ -1,7 +1,7 @@
 import unittest
 
 
-def parse_HTTP(req):
+def parse_HTTP(req: str) -> tuple:
     res = []
     temp = ""
     for x in req:
@@ -15,8 +15,23 @@ def parse_HTTP(req):
     return tuple(res)
 
 
+class HTTPreq:
+    def __init__(self, req: str):
+        pol = parse_HTTP(req)
+        if len(pol) != 3:
+            raise ValueError("inwalid HTTP req size")
+
+        self.req = req
+        self.method = pol[0]
+        self.verson = pol[2]
+        self.path = pol[1]
+
+
+p1 = HTTPreq("GET /index.html HTTP/1.0")
+
+
 class TestStringMethods(unittest.TestCase):
-    def test_upper(self):  # metod       reqest
+    def test_minimalHTTPreq(self):  # metod       ścieszka   wersja
         self.assertEqual(
             parse_HTTP("GET /index.html HTTP/1.0"), ("GET", "/index.html", "HTTP/1.0")
         )
@@ -30,6 +45,14 @@ class TestStringMethods(unittest.TestCase):
             parse_HTTP("DELETE /index.html HTTP/1.0"),
             ("DELETE", "/index.html", "HTTP/1.0"),
         )
+
+    def test_HTTPHeders(self):
+        req = HTTPreq(
+            "GET /index.html HTTP/1.0\nHost: localhost:8000\nUser-Agent: Mozilla/5.0"
+        )
+        self.assertEqual(req.method, "GET")
+        self.assertEqual(req.path, "/index.html")
+        self.assertEqual(req.verson, "HTTP/1.0")
 
 
 if __name__ == "__main__":
