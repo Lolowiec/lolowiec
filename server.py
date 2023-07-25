@@ -1,35 +1,36 @@
 import unittest
 
 
-def parse_HTTP(req: str) -> tuple:
-    res = []
-    temp = ""
-    for x in req:
-        print(x)
-        if " " in x:
-            res.append(temp)
-            temp = ""
-        else:
-            temp += x
-    res.append(temp)
-    return tuple(res)
+
+   
 
 
 class HTTPreq:
-    def __init__(self, req: str):
-        pol = parse_HTTP(req)
-        dic = {}
-        self.req = req
-        self.dic = dic
-        self.method = pol[0]
-        self.path = pol[1]
-        self.verson = pol[2]
+    def __init__(self, req: str): 
+        reqlines = req.splitlines()                     #cały tekst 
+        firstrow =  reqlines[0].split(' ')              #linia 0
         self.headers = {}
-        self.headers[""] = 123
+        self.method = firstrow[0]
+        self.path = firstrow[1]
+        self.verson = firstrow[2]
+        for i in range(1, len(reqlines)) :
+            headerrow = reqlines[i]                     #nagłówki
+            B = headerrow.find(':')
+            key = headerrow[:B]
+            value = headerrow[B+1:]
+            self.headers[key] = value.strip()
+            
+
+ 
+        #zmiena    vartość
+
+            
+        
+        
 
 
 class TestStringMethods(unittest.TestCase):
-    def test_minimalHTTPreq(self):  # metod       ścieszka   wersja
+    def test_minimalHTTPreq(self):                                      # METHOD                   PATH                 VERSON
         reqGET = HTTPreq("GET /index.html HTTP/1.0")
         self.assertEqual(reqGET.method, "GET")
         self.assertEqual(reqGET.path, "/index.html")
@@ -52,13 +53,25 @@ class TestStringMethods(unittest.TestCase):
 
     def test_HTTPHeders(self):
         req = HTTPreq(
-            "GET /index.html HTTP/1.0\nHost: localhost:8000\nUser-Agent: Mozilla/5.0"
+            "GET /index.html HTTP/1.0\nHost:localhost:8000\nUser-Agent: Mozilla/5.0"
         )
         self.assertEqual(req.method, "GET")
         self.assertEqual(req.path, "/index.html")
         self.assertEqual(req.verson, "HTTP/1.0")
         self.assertEqual(req.headers["Host"], "localhost:8000")
         self.assertEqual(req.headers["User-Agent"], "Mozilla/5.0")
+
+
+        req = HTTPreq(
+            "GET /index.html HTTP/1.0\nHost:localhost:8000 \nUser-Agent:  Mozilla/5.0 "
+        )
+        self.assertEqual(req.method, "GET")
+        self.assertEqual(req.path, "/index.html")
+        self.assertEqual(req.verson, "HTTP/1.0")
+        self.assertEqual(req.headers["Host"], "localhost:8000")
+        self.assertEqual(req.headers["User-Agent"], "Mozilla/5.0")
+        
+
 
 
 if __name__ == "__main__":
@@ -91,3 +104,12 @@ if __name__ == "__main__":
 
 #         print(request)
 #         client.close()
+
+
+
+
+
+
+#Host: localhost:8000
+# key:Host 
+# Value: localhost:8000 
