@@ -22,6 +22,12 @@ class HttpRequest:
             self.headers[key] = value.strip()
         #zmiena    vartość
 
+class HttpResponse:
+    def __init__(self) -> None:
+        self.response = 'HTTP/1.1 404 Not Found'
+        
+
+
 
 class TestHttpRequest(unittest.TestCase):
     def test_minimalHTTPreq(self):                                      # METHOD                   PATH                 VERSON
@@ -73,13 +79,15 @@ class TestHttpRequest(unittest.TestCase):
         self.assertEqual(req.body,'Hello World')
 
 
+    
+
 
 # if __name__ == "__main__":
 #     unittest.main()
 
 
 if __name__ == '__main__':
-    ip = '127.0.0.1'
+    ip = '127.0.0.1'    
     port= 1235
 
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -95,9 +103,17 @@ if __name__ == '__main__':
         req = client.recv(1024)
         req = req.decode('utf-8')
         req = HttpRequest(req)
-        print(req)
 
+        
+        if '/' == req.path:
+            client.sendall(bytes('htlm', "utf-8"))
+        elif '/haelo' == req.path:
+            client.sendall(bytes('Hello World', "utf-8"))
+        else:
+            client.sendall(bytes('HTTP/1.1 404 Not Found', 'utf-8'))
+        
         client.close()
+    
 
 
 
