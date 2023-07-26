@@ -1,3 +1,4 @@
+import socket
 import unittest
 
 
@@ -73,36 +74,30 @@ class TestHttpRequest(unittest.TestCase):
 
 
 
-if __name__ == "__main__":
-    unittest.main()
+# if __name__ == "__main__":
+#     unittest.main()
 
 
-# if __name__ == '__main__':
-#     ip = '127.0.0.1'
-#     port= 1235
+if __name__ == '__main__':
+    ip = '127.0.0.1'
+    port= 1235
 
-#     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#     server.bind((ip, port))
-#     server.listen(5)
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind((ip, port))
+    server.listen(5)
 
 
-#     while True:
-#         client, address = server.accept()
-#         print(f'Connection - {address[0]} : {address[1]} ')
+    while True:
 
-#         request = client.recv(1024)
-#         request = request.decode('utf-8')
-#         if 'GET' in request :
-#             print('Its GET')
-#         if 'POST' in request :
-#             print('Its POST')
-#         if 'PUT' in request :
-#             print('Its PUT')
-#         if 'DELETE' in request :
-#             print('Its DELETE')
+        client, address = server.accept()
+        print(f'Connection - {address[0]} : {address[1]} ')
 
-#         print(request)
-#         client.close()
+        req = client.recv(1024)
+        req = req.decode('utf-8')
+        req = HttpRequest(req)
+        print(req)
+
+        client.close()
 
 
 
