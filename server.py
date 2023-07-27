@@ -22,12 +22,6 @@ class HttpRequest:
             self.headers[key] = value.strip()
         #zmiena    vartość
 
-class HttpResponse:
-    def __init__(self) -> None:
-        self.response = 'HTTP/1.1 404 Not Found'
-        
-
-
 
 class TestHttpRequest(unittest.TestCase):
     def test_minimalHTTPreq(self):                                      # METHOD                   PATH                 VERSON
@@ -78,48 +72,70 @@ class TestHttpRequest(unittest.TestCase):
         self.assertEqual(req.headers['Content-Length'], '123')
         self.assertEqual(req.body,'Hello World')
 
-
-    
-
-
-# if __name__ == "__main__":
-#     unittest.main()
-
-
-if __name__ == '__main__':
-    ip = '127.0.0.1'    
-    port= 1235
-
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind((ip, port))
-    server.listen(5)
-
-
-    while True:
-
-        client, address = server.accept()
-        print(f'Connection - {address[0]} : {address[1]} ')
-
-        req = client.recv(1024)
-        req = req.decode('utf-8')
-        req = HttpRequest(req)
-
-        
-        if '/' == req.path:
-            client.sendall(bytes('htlm', "utf-8"))
-        elif '/haelo' == req.path:
-            client.sendall(bytes('Hello World', "utf-8"))
-        else:
-            client.sendall(bytes('HTTP/1.1 404 Not Found', 'utf-8'))
-        
-        client.close()
     
 
 
 
+class HttpResponse:
+    def __init__(self,verson:str,status_code:int,status_text:str) -> None:
+        self.text = ''
+
+
+class TestHTTPResponse(unittest.TestCase):
+    def test_HttpResponse404(self):
+        response = HttpResponse('HTTP/1.1', 404, 'Not Found')
+        self.assertEqual(response.text, 'HTTP/1.1 404 Not Found')
+        
+
+    def test_Httpresponse200(self):
+        response = HttpResponse('HTTP/1.1 200 OK')
+        self.assertEqual(response.text, 'HTTP/1.1', 200, 'OK')
+        
+
+    def test_Httpresponse302(self):
+        response = HttpResponse('HTTP/1.1 302 Found')
+        self.assertEqual(response.text, 'HTTP/1.1', 302, 'Found')
 
 
 
-#Host: localhost:8000
-# key:Host 
-# Value: localhost:8000 
+
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+# if __name__ == '__main__':
+#     ip = '127.0.0.1'    
+#     port= 1235
+
+#     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#     server.bind((ip, port))
+#     server.listen(5)
+
+
+#     while True:
+
+#         client, address = server.accept()
+#         print(f'Connection - {address[0]} : {address[1]} ')
+
+#         req = client.recv(1024)
+#         req = req.decode('utf-8')
+#         req = HttpRequest(req)
+
+        
+#         if '/' == req.path:
+#             client.sendall(bytes('htlm', "utf-8"))
+#         elif '/haelo' == req.path:
+#             client.sendall(bytes('Hello World', "utf-8"))
+#         else:
+#             client.sendall(bytes('HTTP/1.1 404 Not Found', 'utf-8'))
+        
+#         client.close()
+    
+
+
+
+
+
+
