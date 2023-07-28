@@ -77,14 +77,19 @@ class TestHttpRequest(unittest.TestCase):
 
 
 class HttpResponse:
-    def __init__(self, verson:str , status_code:int , status_text:str , headers:dict|None = None ) -> None:
+    def __init__(self, verson:str , status_code:int , status_text:str , headers:dict|None = None , body:str|None = None ) -> None:
         self.text =  f'{verson} {status_code} {status_text}'
         if headers is not None:
             self.text += '\n'
             for (key,value) in headers.items() :
                 self.text += f'{key}: {value}\n'
             self.text += '\n'
+        if body is not None:
+            if headers is not None:
+                self.text = self.text.removesuffix('\n\n') 
+            self.text += f'\nContent-Length: {len(body)}\nContent-Type: text/html; charset=utf-8\n\n{body}'
 
+        
 
 class TestHTTPResponse(unittest.TestCase):
     def test_HttpResponse404(self):
@@ -102,10 +107,19 @@ class TestHTTPResponse(unittest.TestCase):
         self.assertEqual(response.text, 'HTTP/1.1 302 Found')
 
 
-    def test_HTTPBody(self):
-        response = HttpResponse('HTTP/1.1' ,404, 'Not Found', {'headerA': 'headerB' , 'headerC': "headerD"})
-        self.assertEqual(response.text, 'HTTP/1.1 404 Not Found\nheaderA: headerB\nheaderC: headerD\n\n')
+    def test_HTTPHeaders(self):
+        response = HttpResponse('HTTP/1.1' ,404, 'Not Found', {'headerA': 'valueA' , 'headerB': "valueB"})
+        self.assertEqual(response.text, 'HTTP/1.1 404 Not Found\nheaderA: valueA\nheaderB: valueB\n\n')
 
+
+    def test_HTTPBody_No_Headers(self):
+        response = HttpResponse('HTTP/1.1' ,404, 'Not Found', None , 'Test Body')
+        self.assertEqual(response.text, 'HTTP/1.1 404 Not Found\nContent-Length: 9\nContent-Type: text/html; charset=utf-8\n\nTest Body')
+
+
+    def test_HTTPBodyWithHeaders(self):
+        response = HttpResponse('HTTP/1.1' ,404, 'Not Found', {'headerA': 'valueA' , 'headerB': "valueB"} , 'Test Body')
+        self.assertEqual(response.text, 'HTTP/1.1 404 Not Found\nheaderA: valueA\nheaderB: valueB\nContent-Length: 9\nContent-Type: text/html; charset=utf-8\n\nTest Body')
 
 
 
