@@ -40,7 +40,7 @@ class TestHttpRequest(unittest.TestCase):
         self.assertEqual(reqPUT.path, "/index.html")
         self.assertEqual(reqPUT.verson, "HTTP/1.0")
 
-        reqDELETE = HttpRequest("DELETE /index.html HTTP/1.0")
+        reqDELETE = HttpRequest("DELETE /index.html HTTP/1.0")                  #X = class    x its object class ,  class 
         self.assertEqual(reqDELETE.method, "DELETE")
         self.assertEqual(reqDELETE.path, "/index.html")
         self.assertEqual(reqDELETE.verson, "HTTP/1.0")
@@ -72,7 +72,7 @@ class TestHttpRequest(unittest.TestCase):
         self.assertEqual(req.headers['Content-Length'], '123')
         self.assertEqual(req.body,'Hello World')
 
-    
+
 
 
 
@@ -81,15 +81,16 @@ class HttpResponse:
         self.text =  f'{verson} {status_code} {status_text}'
         if headers is not None:
             self.text += '\n'
-            for (key,value) in headers.items() :
+            for (key,value) in headers.items() :                            
                 self.text += f'{key}: {value}\n'
             self.text += '\n'
         if body is not None:
-            if headers is not None:
+            if headers is not None:                             
                 self.text = self.text.removesuffix('\n\n') 
             self.text += f'\nContent-Length: {len(body)}\nContent-Type: text/html; charset=utf-8\n\n{body}'
 
-        
+
+        #functions po . np .itms
 
 class TestHTTPResponse(unittest.TestCase):
     def test_HttpResponse404(self):
@@ -125,37 +126,37 @@ class TestHTTPResponse(unittest.TestCase):
 
 
 
-if __name__ == "__main__":
-    unittest.main()
+# if __name__ == "__main__":
+#     unittest.main()
 
 
-# if __name__ == '__main__':
-#     ip = '127.0.0.1'    
-#     port= 1235
+if __name__ == '__main__':
+    ip = '127.0.0.1'    
+    port= 1234
 
-#     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#     server.bind((ip, port))
-#     server.listen(5)
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind((ip, port))
+    server.listen(5)
 
 
-#     while True:
+    while True:
 
-#         client, address = server.accept()
-#         print(f'Connection - {address[0]} : {address[1]} ')
+        client, address = server.accept()
+        print(f'Connection - {address[0]} : {address[1]} ')
 
-#         req = client.recv(1024)
-#         req = req.decode('utf-8')
-#         req = HttpRequest(req)
-
+        req = client.recv(1024)
+        req = req.decode('utf-8')
+        req = HttpRequest(req)
+        res = HttpResponse('HTTP/1.1', 404, 'Not Found')
         
-#         if '/' == req.path:
-#             client.sendall(bytes('htlm', "utf-8"))
-#         elif '/haelo' == req.path:
-#             client.sendall(bytes('Hello World', "utf-8"))
-#         else:
-#             client.sendall(bytes('HTTP/1.1 404 Not Found', 'utf-8'))
+        if '/' == req.path:
+            client.sendall(bytes(res.text, "utf-8"))
+        elif '/helo' == req.path:
+            client.sendall(bytes(res.text, "utf-8"))
+        else:
+            client.sendall(bytes(res.text, 'utf-8'))
         
-#         client.close()
+        client.close()
     
 
 
