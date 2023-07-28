@@ -77,8 +77,13 @@ class TestHttpRequest(unittest.TestCase):
 
 
 class HttpResponse:
-    def __init__(self,verson:str,status_code:int,status_text:str) -> None:
-        self.text = ''
+    def __init__(self, verson:str , status_code:int , status_text:str , headers:dict|None = None ) -> None:
+        self.text =  f'{verson} {status_code} {status_text}'
+        if headers is not None:
+            self.text += '\n'
+            for (key,value) in headers.items() :
+                self.text += f'{key}: {value}\n'
+            self.text += '\n'
 
 
 class TestHTTPResponse(unittest.TestCase):
@@ -88,13 +93,18 @@ class TestHTTPResponse(unittest.TestCase):
         
 
     def test_Httpresponse200(self):
-        response = HttpResponse('HTTP/1.1 200 OK')
-        self.assertEqual(response.text, 'HTTP/1.1', 200, 'OK')
+        response = HttpResponse('HTTP/1.1' ,200, 'OK')
+        self.assertEqual(response.text, 'HTTP/1.1 200 OK')
         
 
     def test_Httpresponse302(self):
-        response = HttpResponse('HTTP/1.1 302 Found')
-        self.assertEqual(response.text, 'HTTP/1.1', 302, 'Found')
+        response = HttpResponse('HTTP/1.1' ,302, 'Found')
+        self.assertEqual(response.text, 'HTTP/1.1 302 Found')
+
+
+    def test_HTTPBody(self):
+        response = HttpResponse('HTTP/1.1' ,404, 'Not Found', {'headerA': 'headerB' , 'headerC': "headerD"})
+        self.assertEqual(response.text, 'HTTP/1.1 404 Not Found\nheaderA: headerB\nheaderC: headerD\n\n')
 
 
 
