@@ -1,12 +1,24 @@
+#!/usr/bin/python3
+
+import argparse
 import socket
 
-from .httpserver import HttpRequest, HttpResponse
+from httpserver import HttpRequest, HttpResponse
+
 
 if __name__ == '__main__':
-    ip = '127.0.0.1'    
-    port= 1234
+    parser = argparse.ArgumentParser(
+        prog='Httpserver',
+        description='Working',
+        epilog='Iam can t help you')
+
+    parser.add_argument('-i', '--ip')
+    parser.add_argument('-p', '--port', type=int)
+    args = parser.parse_args()
+
+    print(f'Starting server on {args.ip}:{args.port}')
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind((ip, port))
+    server.bind((args.ip, args.port))
     server.listen(5)
 
     while True:
