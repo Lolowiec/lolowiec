@@ -27,7 +27,7 @@ if __name__ == "__main__":
         req = client.recv(1024)
         req = req.decode("utf-8")
         req = HttpRequest(req)
-        res = HttpResponse("HTTP/1.1", 404, "Not Found")
+        res = HttpResponse("HTTP/1.1",200, "OK")
 
         if "/" == req.path:
             client.sendall(bytes(res.text, "utf-8"))
